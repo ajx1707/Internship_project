@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Bank Deposit Slip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            background: white;
+            padding: 30px;
+            border: 3px solid #000;
+        }
+        
+        .slip {
+            border: 2px solid #000;
+            padding: 15px;
+            background: white;
+        }
+        
+        .header {
+            background: #000;
+            color: white;
+            padding: 8px;
+            margin: -15px -15px 15px -15px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .bank-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .bank-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 3px;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #666;
+            font-size: 12px;
+        }
+        
+        .form-group input[type="text"] {
+            background: #fff;
+        }
+        
+        .account-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+            gap: 3px;
+            margin-bottom: 12px;
+        }
+        
+        .account-boxes input {
+            width: 100%;
+            padding: 8px 4px;
+            text-align: center;
+            border: 1px solid #000;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .date-boxes {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 3px;
+        }
+        
+        .date-boxes input {
+            width: 100%;
+            padding: 8px 4px;
+            text-align: center;
+            border: 1px solid #000;
+            font-size: 12px;
+        }
+        
+        .inline-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .denomination-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+        
+        .denomination-table th {
+            background: #000;
+            color: white;
+            padding: 6px;
+            text-align: left;
+            font-size: 10px;
+        }
+        
+        .denomination-table td {
+            border: 1px solid #666;
+            padding: 4px;
+        }
+        
+        .denomination-table input {
+            width: 100%;
+            border: none;
+            padding: 4px;
+            font-size: 11px;
+        }
+        
+        .denom-label {
+            font-weight: bold;
+            padding: 4px 8px;
+            border: 1px solid #666;
+            background: #f0f0f0;
+        }
+        
+        .total-row {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        .footer-note {
+            font-size: 9px;
+            margin-top: 10px;
+            padding: 8px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .signature-section {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
+        }
+        
+        .signature-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-top: 30px;
+            font-size: 10px;
+        }
+        
+        .slip-type {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                border: none;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Slip - Regular Deposit -->
+        <div class="slip">
+            <div class="header">
+                <div class="bank-logo">
+                    <span>🏦</span>
+                    <span class="bank-name">Indian Bank</span>
+                </div>
+            </div>
+            
+            <div class="slip-type">வைப்பு சீட்டு / DEPOSIT / PAY IN SLIP</div>
+            
+            <div class="form-group">
+                <label>கிளை/Branch</label>
+                <input type="text" id="slip1_branch" placeholder="Branch Name">
+            </div>
+            
+            <div class="form-group">
+                <label>நாள்/Date</label>
+                <div class="date-boxes">
+                    <input type="text" maxlength="1" id="slip1_date_dd1" placeholder="D">
+                    <input type="text" maxlength="1" id="slip1_date_dd2" placeholder="D">
+                    <input type="text" maxlength="1" id="slip1_date_mm1" placeholder="M">
+                    <input type="text" maxlength="1" id="slip1_date_mm2" placeholder="M">
+                    <input type="text" maxlength="1" id="slip1_date_yyyy1" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip1_date_yyyy2" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip1_date_yyyy3" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip1_date_yyyy4" placeholder="Y">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>SB/CA/OD/CC/RD/TL/DL A/c No./Credit Card No.</label>
+                <div class="account-boxes">
+                    <input type="text" maxlength="1" id="slip1_account_1">
+                    <input type="text" maxlength="1" id="slip1_account_2">
+                    <input type="text" maxlength="1" id="slip1_account_3">
+                    <input type="text" maxlength="1" id="slip1_account_4">
+                    <input type="text" maxlength="1" id="slip1_account_5">
+                    <input type="text" maxlength="1" id="slip1_account_6">
+                    <input type="text" maxlength="1" id="slip1_account_7">
+                    <input type="text" maxlength="1" id="slip1_account_8">
+                    <input type="text" maxlength="1" id="slip1_account_9">
+                    <input type="text" maxlength="1" id="slip1_account_10">
+                    <input type="text" maxlength="1" id="slip1_account_11">
+                    <input type="text" maxlength="1" id="slip1_account_12">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>பெயர் /Name</label>
+                <input type="text" id="slip1_name" placeholder="Account Holder Name">
+            </div>
+            
+            <div class="form-group">
+                <label>தொலைபேசி எண் /Tel. No.</label>
+                <div class="inline-fields">
+                    <input type="text" id="slip1_tel_no" placeholder="எண்/No">
+                    <input type="text" id="slip1_tel_p" placeholder="வைப்/P">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>தொகை/Amount</label>
+                <input type="text" id="slip1_amount" placeholder="Amount">
+            </div>
+            
+            <div class="form-group">
+                <label>ரூபாய் எண்ணிக்கையில்/Rupees in words</label>
+                <input type="text" id="slip1_amount_words" placeholder="Amount in Words">
+            </div>
+            
+            <table class="denomination-table">
+                <thead>
+                    <tr>
+                        <th>காசோலை/காசு செக் / செக்/ நாணயம் பெயர் விவரங்கள் எண்/R<br>Cash/Cheque No./Date & Name of Bank & Branch</th>
+                        <th>எண்/R</th>
+                        <th>வைப்/P</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" id="slip1_cheque_details_1" placeholder="Cheque/Cash Details"></td>
+                        <td><input type="text" id="slip1_cheque_rs_1" placeholder="Rs"></td>
+                        <td><input type="text" id="slip1_cheque_p_1" placeholder="P"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="slip1_cheque_details_2" placeholder=""></td>
+                        <td><input type="text" id="slip1_cheque_rs_2" placeholder=""></td>
+                        <td><input type="text" id="slip1_cheque_p_2" placeholder=""></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>மொத்தம்/Total</td>
+                        <td><input type="text" id="slip1_total_rs" placeholder=""></td>
+                        <td><input type="text" id="slip1_total_p" placeholder=""></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="signature-section">
+                <div style="font-size: 9px; margin-bottom: 5px;">அலுவலர்/காசாளர்/SWO<br>Officer/Cashier/SWO</div>
+                <div style="font-size: 8px; margin-top: 20px;">Indian Bank Toll Free 1800 425 00 000</div>
+            </div>
+        </div>
+        
+        <!-- Middle Slip - Cash Deposit -->
+        <div class="slip">
+            <div class="header">
+                <div class="bank-logo">
+                    <span>🏦</span>
+                    <span class="bank-name">Indian Bank</span>
+                </div>
+            </div>
+            
+            <div class="slip-type">வைப்பு சீட்டு / DEPOSIT / PAY IN SLIP<br>
+                <span style="font-size: 10px;">For Cash Deposit of ₹ 50,000/- & Above</span>
+            </div>
+            
+            <div class="form-group">
+                <label>கிளை/Branch</label>
+                <input type="text" id="slip2_branch" placeholder="Branch Name">
+            </div>
+            
+            <div class="form-group">
+                <label>Form60 <input type="checkbox" id="slip2_form60"> Form61 <input type="checkbox" id="slip2_form61"></label>
+            </div>
+            
+            <div style="background: #000; color: white; padding: 5px; font-weight: bold; font-size: 11px; margin: 10px 0;">
+                காசு வைப்பு/ தையாக இருந்தால் / CASH DEPOSIT
+            </div>
+            
+            <table class="denomination-table" style="margin-bottom: 15px;">
+                <tbody>
+                    <tr>
+                        <td class="denom-label">2000 X</td>
+                        <td><input type="text" id="slip2_denom_2000_qty" placeholder="Qty"></td>
+                        <td style="width: 50px;"><label>எண்/R</label></td>
+                        <td><input type="text" id="slip2_denom_2000_amount" placeholder="Amount"></td>
+                        <td style="width: 40px;"><label>வைப்/P</label></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">500 X</td>
+                        <td><input type="text" id="slip2_denom_500_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_500_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">200 X</td>
+                        <td><input type="text" id="slip2_denom_200_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_200_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">100 X</td>
+                        <td><input type="text" id="slip2_denom_100_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_100_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">50 X</td>
+                        <td><input type="text" id="slip2_denom_50_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_50_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">20 X</td>
+                        <td><input type="text" id="slip2_denom_20_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_20_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">10 X</td>
+                        <td><input type="text" id="slip2_denom_10_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_10_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">5 X</td>
+                        <td><input type="text" id="slip2_denom_5_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_5_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">நாணயம்/Coins</td>
+                        <td><input type="text" id="slip2_denom_coins_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_coins_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">மொத்தம்/Total</td>
+                        <td></td>
+                        <td><input type="text" id="slip2_total_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="footer-note">
+                <ol style="padding-left: 15px; line-height: 1.4;">
+                    <li>அனைத்து காசோலைகளும் கூட்டு டெபாசிட்/ All Cheques must be crossed.</li>
+                    <li>தயவுசெய்து காசோலையின் பின்னால் உங்கள் கணக்கு எண் மற்றும் பெயரை குறிக்கவும் / Mention your A/c No. and Name on back of the Cheques</li>
+                    <li>காசோலை மற்றும் ரொக்க காசு டெபாசிட் ஸ்லிப் வெவ்வேறு இருக்க வேண்டும் / Please use separate slips for Cash Deposit, Outstation Cheques and Local Cheques.</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- Right Slip - Acknowledgment -->
+        <div class="slip">
+            <div class="header">
+                <div class="bank-logo">
+                    <span>🏦</span>
+                    <span class="bank-name">Indian Bank</span>
+                </div>
+            </div>
+            
+            <div style="text-align: right; margin-bottom: 10px;">
+                <label style="font-size: 11px; font-weight: bold;">நாள்/Date</label>
+                <div class="date-boxes" style="margin-top: 5px;">
+                    <input type="text" maxlength="1" id="slip3_date_dd1" placeholder="D">
+                    <input type="text" maxlength="1" id="slip3_date_dd2" placeholder="D">
+                    <input type="text" maxlength="1" id="slip3_date_mm1" placeholder="M">
+                    <input type="text" maxlength="1" id="slip3_date_mm2" placeholder="M">
+                    <input type="text" maxlength="1" id="slip3_date_yyyy1" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip3_date_yyyy2" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip3_date_yyyy3" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip3_date_yyyy4" placeholder="Y">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>SB/CA/OD/CC/RD/TL/DL A/c No./Credit Card No.</label>
+                <div class="account-boxes">
+                    <input type="text" maxlength="1" id="slip3_account_1">
+                    <input type="text" maxlength="1" id="slip3_account_2">
+                    <input type="text" maxlength="1" id="slip3_account_3">
+                    <input type="text" maxlength="1" id="slip3_account_4">
+                    <input type="text" maxlength="1" id="slip3_account_5">
+                    <input type="text" maxlength="1" id="slip3_account_6">
+                    <input type="text" maxlength="1" id="slip3_account_7">
+                    <input type="text" maxlength="1" id="slip3_account_8">
+                    <input type="text" maxlength="1" id="slip3_account_9">
+                    <input type="text" maxlength="1" id="slip3_account_10">
+                    <input type="text" maxlength="1" id="slip3_account_11">
+                    <input type="text" maxlength="1" id="slip3_account_12">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>பெயர் /Name</label>
+                <input type="text" id="slip3_name" placeholder="Account Holder Name">
+            </div>
+            
+            <div class="form-group">
+                <label>தொலைபேசி எண் / Tel. No./Mobile No.</label>
+                <input type="text" id="slip3_mobile" placeholder="Mobile Number">
+            </div>
+            
+            <div class="form-group">
+                <label>மின்னஞ்சல் /Email ID</label>
+                <input type="text" id="slip3_email" placeholder="Email Address">
+            </div>
+            
+            <div class="form-group">
+                <label>ரூபாய் எண்ணிக்கையில்/Rupees in words</label>
+                <input type="text" id="slip3_amount_words" placeholder="Amount in Words">
+            </div>
+            
+            <table class="denomination-table">
+                <thead>
+                    <tr>
+                        <th style="background: #000; color: white;">காசோலை எண். /தேதி/வங்கி மற்றும் கிளையின் பெயர்/விவரன்<br>Cheque No. /Date /Name of Bank & Branch</th>
+                        <th style="width: 50px;">எண்/R</th>
+                        <th style="width: 40px;">வைப்/P</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" id="slip3_cheque_details_1" placeholder="Cheque Details"></td>
+                        <td><input type="text" id="slip3_cheque_rs_1" placeholder="Rs"></td>
+                        <td><input type="text" id="slip3_cheque_p_1" placeholder="P"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="slip3_cheque_details_2" placeholder=""></td>
+                        <td><input type="text" id="slip3_cheque_rs_2" placeholder=""></td>
+                        <td><input type="text" id="slip3_cheque_p_2" placeholder=""></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>மொத்தம்/Total</td>
+                        <td><input type="text" id="slip3_total_rs" placeholder=""></td>
+                        <td><input type="text" id="slip3_total_p" placeholder=""></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="form-group">
+                <label>பரிவர்த்தனை அடையாள எண் /Transaction ID</label>
+                <input type="text" id="slip3_transaction_id" placeholder="Transaction ID">
+            </div>
+            
+            <div class="signature-section">
+                <div class="signature-line">
+                    <div>
+                        <div style="font-size: 9px;">உண்மை சத்தியம்/SWO</div>
+                        <div style="margin-top: 25px; border-top: 1px solid #000; padding-top: 3px; font-size: 9px;">
+                            Signature of Depositor
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 9px;">அலுவலர் / Passing Officer</div>
+                        <div style="margin-top: 25px; border-top: 1px solid #000; padding-top: 3px; font-size: 9px;">
+                            வைப்புதாரரின் கையொப்பம்
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
