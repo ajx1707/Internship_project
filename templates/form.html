@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Bank Deposit Slip</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            background: white;
+            padding: 30px;
+            border: 3px solid #000;
+        }
+        
+        .slip {
+            border: 2px solid #000;
+            padding: 15px;
+            background: white;
+        }
+        
+        .header {
+            background: #000;
+            color: white;
+            padding: 8px;
+            margin: -15px -15px 15px -15px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .bank-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .bank-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 3px;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #666;
+            font-size: 12px;
+        }
+        
+        .form-group input[type="text"] {
+            background: #fff;
+        }
+        
+        .account-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(25px, 1fr));
+            gap: 3px;
+            margin-bottom: 12px;
+        }
+        
+        .account-boxes input {
+            width: 100%;
+            padding: 8px 4px;
+            text-align: center;
+            border: 1px solid #000;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .date-boxes {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 3px;
+        }
+        
+        .date-boxes input {
+            width: 100%;
+            padding: 8px 4px;
+            text-align: center;
+            border: 1px solid #000;
+            font-size: 12px;
+        }
+        
+        .inline-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .denomination-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 11px;
+        }
+        
+        .denomination-table th {
+            background: #000;
+            color: white;
+            padding: 6px;
+            text-align: left;
+            font-size: 10px;
+        }
+        
+        .denomination-table td {
+            border: 1px solid #666;
+            padding: 4px;
+        }
+        
+        .denomination-table input {
+            width: 100%;
+            border: none;
+            padding: 4px;
+            font-size: 11px;
+        }
+        
+        .denom-label {
+            font-weight: bold;
+            padding: 4px 8px;
+            border: 1px solid #666;
+            background: #f0f0f0;
+        }
+        
+        .total-row {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        .footer-note {
+            font-size: 9px;
+            margin-top: 10px;
+            padding: 8px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        
+        .signature-section {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc;
+        }
+        
+        .signature-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-top: 30px;
+            font-size: 10px;
+        }
+        
+        .slip-type {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                border: none;
+                padding: 10px;
+            }
+            .action-buttons {
+                display: none !important;
+            }
+            .preview-modal {
+                display: none !important;
+            }
+        }
+        .action-buttons {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .action-btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .preview-btn {
+            background: #3498db;
+            color: white;
+        }
+        .preview-btn:hover {
+            background: #2980b9;
+            transform: scale(1.05);
+        }
+        .print-btn {
+            background: #27ae60;
+            color: white;
+        }
+        .print-btn:hover {
+            background: #229954;
+            transform: scale(1.05);
+        }
+        .clear-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        .clear-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .preview-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            position: relative;
+        }
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+        .preview-header h2 {
+            color: #333;
+        }
+        .preview-close {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .preview-close:hover {
+            background: #c0392b;
+        }
+        .preview-data {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .preview-section {
+            margin-bottom: 25px;
+        }
+        .preview-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        .preview-field {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .preview-field:last-child {
+            border-bottom: none;
+        }
+        .preview-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .preview-value {
+            color: #333;
+        }
+        .preview-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .empty-value {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="action-buttons">
+        <button class="action-btn preview-btn" onclick="showPreview()">📋 Preview Form</button>
+        <button class="action-btn print-btn" onclick="printForm()">🖨️ Print as PDF</button>
+        <button class="action-btn clear-btn" onclick="clearForm()">🗑️ Clear Form</button>
+    </div>
+
+    <div class="container">
+        <!-- Left Slip - Regular Deposit -->
+        <div class="slip">
+            <div class="header">
+                <div class="bank-logo">
+                    <span>🏦</span>
+                    <span class="bank-name">Indian Bank</span>
+                </div>
+            </div>
+            
+            <div class="slip-type">வைப்பு சீட்டு / DEPOSIT / PAY IN SLIP</div>
+            
+            <div class="form-group">
+                <label>கிளை/Branch</label>
+                <input type="text" id="slip1_branch" placeholder="Branch Name">
+            </div>
+            
+            <div class="form-group">
+                <label>நாள்/Date</label>
+                <div class="date-boxes">
+                    <input type="text" maxlength="1" id="slip1_date_dd1" placeholder="D">
+                    <input type="text" maxlength="1" id="slip1_date_dd2" placeholder="D">
+                    <input type="text" maxlength="1" id="slip1_date_mm1" placeholder="M">
+                    <input type="text" maxlength="1" id="slip1_date_mm2" placeholder="M">
+                    <input type="text" maxlength="1" id="slip1_date_yyyy1" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip1_date_yyyy2" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip1_date_yyyy3" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip1_date_yyyy4" placeholder="Y">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>SB/CA/OD/CC/RD/TL/DL A/c No./Credit Card No.</label>
+                <div class="account-boxes">
+                    <input type="text" maxlength="1" id="slip1_account_1">
+                    <input type="text" maxlength="1" id="slip1_account_2">
+                    <input type="text" maxlength="1" id="slip1_account_3">
+                    <input type="text" maxlength="1" id="slip1_account_4">
+                    <input type="text" maxlength="1" id="slip1_account_5">
+                    <input type="text" maxlength="1" id="slip1_account_6">
+                    <input type="text" maxlength="1" id="slip1_account_7">
+                    <input type="text" maxlength="1" id="slip1_account_8">
+                    <input type="text" maxlength="1" id="slip1_account_9">
+                    <input type="text" maxlength="1" id="slip1_account_10">
+                    <input type="text" maxlength="1" id="slip1_account_11">
+                    <input type="text" maxlength="1" id="slip1_account_12">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>பெயர் /Name</label>
+                <input type="text" id="slip1_name" placeholder="Account Holder Name">
+            </div>
+            
+            <div class="form-group">
+                <label>தொலைபேசி எண் /Tel. No.</label>
+                <div class="inline-fields">
+                    <input type="text" id="slip1_tel_no" placeholder="எண்/No">
+                    <input type="text" id="slip1_tel_p" placeholder="வைப்/P">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>தொகை/Amount</label>
+                <input type="text" id="slip1_amount" placeholder="Amount">
+            </div>
+            
+            <div class="form-group">
+                <label>ரூபாய் எண்ணிக்கையில்/Rupees in words</label>
+                <input type="text" id="slip1_amount_words" placeholder="Amount in Words">
+            </div>
+            
+            <table class="denomination-table">
+                <thead>
+                    <tr>
+                        <th>காசோலை/காசு செக் / செக்/ நாணயம் பெயர் விவரங்கள் எண்/R<br>Cash/Cheque No./Date & Name of Bank & Branch</th>
+                        <th>எண்/R</th>
+                        <th>வைப்/P</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" id="slip1_cheque_details_1" placeholder="Cheque/Cash Details"></td>
+                        <td><input type="text" id="slip1_cheque_rs_1" placeholder="Rs"></td>
+                        <td><input type="text" id="slip1_cheque_p_1" placeholder="P"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="slip1_cheque_details_2" placeholder=""></td>
+                        <td><input type="text" id="slip1_cheque_rs_2" placeholder=""></td>
+                        <td><input type="text" id="slip1_cheque_p_2" placeholder=""></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>மொத்தம்/Total</td>
+                        <td><input type="text" id="slip1_total_rs" placeholder=""></td>
+                        <td><input type="text" id="slip1_total_p" placeholder=""></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="signature-section">
+                <div style="font-size: 9px; margin-bottom: 5px;">அலுவலர்/காசாளர்/SWO<br>Officer/Cashier/SWO</div>
+                <div style="font-size: 8px; margin-top: 20px;">Indian Bank Toll Free 1800 425 00 000</div>
+            </div>
+        </div>
+        
+        <!-- Middle Slip - Cash Deposit -->
+        <div class="slip">
+            <div class="header">
+                <div class="bank-logo">
+                    <span>🏦</span>
+                    <span class="bank-name">Indian Bank</span>
+                </div>
+            </div>
+            
+            <div class="slip-type">வைப்பு சீட்டு / DEPOSIT / PAY IN SLIP<br>
+                <span style="font-size: 10px;">For Cash Deposit of ₹ 50,000/- & Above</span>
+            </div>
+            
+            <div class="form-group">
+                <label>கிளை/Branch</label>
+                <input type="text" id="slip2_branch" placeholder="Branch Name">
+            </div>
+            
+            <div class="form-group">
+                <label>Form60 <input type="checkbox" id="slip2_form60"> Form61 <input type="checkbox" id="slip2_form61"></label>
+            </div>
+            
+            <div style="background: #000; color: white; padding: 5px; font-weight: bold; font-size: 11px; margin: 10px 0;">
+                காசு வைப்பு/ தையாக இருந்தால் / CASH DEPOSIT
+            </div>
+            
+            <table class="denomination-table" style="margin-bottom: 15px;">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Qty</th>
+                        <th>எண்/R</th>
+                        <th>Amount</th>
+                        <th>வைப்/P</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="denom-label">2000 X</td>
+                        <td><input type="text" id="slip2_denom_2000_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_2000_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">500 X</td>
+                        <td><input type="text" id="slip2_denom_500_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_500_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">200 X</td>
+                        <td><input type="text" id="slip2_denom_200_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_200_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">100 X</td>
+                        <td><input type="text" id="slip2_denom_100_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_100_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">50 X</td>
+                        <td><input type="text" id="slip2_denom_50_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_50_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">20 X</td>
+                        <td><input type="text" id="slip2_denom_20_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_20_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">10 X</td>
+                        <td><input type="text" id="slip2_denom_10_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_10_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">5 X</td>
+                        <td><input type="text" id="slip2_denom_5_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_5_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="denom-label">நாணயம்/Coins</td>
+                        <td><input type="text" id="slip2_denom_coins_qty" placeholder=""></td>
+                        <td></td>
+                        <td><input type="text" id="slip2_denom_coins_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="2">மொத்தம்/Total</td>
+                        <td></td>
+                        <td><input type="text" id="slip2_total_amount" placeholder=""></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="footer-note">
+                <ol style="padding-left: 15px; line-height: 1.4;">
+                    <li>அனைத்து காசோலைகளும் கூட்டு டெபாசிட்/ All Cheques must be crossed.</li>
+                    <li>தயவுசெய்து காசோலையின் பின்னால் உங்கள் கணக்கு எண் மற்றும் பெயரை குறிக்கவும் / Mention your A/c No. and Name on back of the Cheques</li>
+                    <li>காசோலை மற்றும் ரொக்க காசு டெபாசிட் ஸ்லிப் வெவ்வேறு இருக்க வேண்டும் / Please use separate slips for Cash Deposit, Outstation Cheques and Local Cheques.</li>
+                </ol>
+            </div>
+        </div>
+        
+        <!-- Right Slip - Acknowledgment -->
+        <div class="slip">
+            <div class="header">
+                <div class="bank-logo">
+                    <span>🏦</span>
+                    <span class="bank-name">Indian Bank</span>
+                </div>
+            </div>
+            
+            <div style="text-align: right; margin-bottom: 10px;">
+                <label style="font-size: 11px; font-weight: bold;">நாள்/Date</label>
+                <div class="date-boxes" style="margin-top: 5px;">
+                    <input type="text" maxlength="1" id="slip3_date_dd1" placeholder="D">
+                    <input type="text" maxlength="1" id="slip3_date_dd2" placeholder="D">
+                    <input type="text" maxlength="1" id="slip3_date_mm1" placeholder="M">
+                    <input type="text" maxlength="1" id="slip3_date_mm2" placeholder="M">
+                    <input type="text" maxlength="1" id="slip3_date_yyyy1" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip3_date_yyyy2" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip3_date_yyyy3" placeholder="Y">
+                    <input type="text" maxlength="1" id="slip3_date_yyyy4" placeholder="Y">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>SB/CA/OD/CC/RD/TL/DL A/c No./Credit Card No.</label>
+                <div class="account-boxes">
+                    <input type="text" maxlength="1" id="slip3_account_1">
+                    <input type="text" maxlength="1" id="slip3_account_2">
+                    <input type="text" maxlength="1" id="slip3_account_3">
+                    <input type="text" maxlength="1" id="slip3_account_4">
+                    <input type="text" maxlength="1" id="slip3_account_5">
+                    <input type="text" maxlength="1" id="slip3_account_6">
+                    <input type="text" maxlength="1" id="slip3_account_7">
+                    <input type="text" maxlength="1" id="slip3_account_8">
+                    <input type="text" maxlength="1" id="slip3_account_9">
+                    <input type="text" maxlength="1" id="slip3_account_10">
+                    <input type="text" maxlength="1" id="slip3_account_11">
+                    <input type="text" maxlength="1" id="slip3_account_12">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>பெயர் /Name</label>
+                <input type="text" id="slip3_name" placeholder="Account Holder Name">
+            </div>
+            
+            <div class="form-group">
+                <label>தொலைபேசி எண் / Tel. No./Mobile No.</label>
+                <input type="text" id="slip3_mobile" placeholder="Mobile Number">
+            </div>
+            
+            <div class="form-group">
+                <label>மின்னஞ்சல் /Email ID</label>
+                <input type="text" id="slip3_email" placeholder="Email Address">
+            </div>
+            
+            <div class="form-group">
+                <label>ரூபாய் எண்ணிக்கையில்/Rupees in words</label>
+                <input type="text" id="slip3_amount_words" placeholder="Amount in Words">
+            </div>
+            
+            <table class="denomination-table">
+                <thead>
+                    <tr>
+                        <th style="background: #000; color: white;">காசோலை எண். /தேதி/வங்கி மற்றும் கிளையின் பெயர்/விவரன்<br>Cheque No. /Date /Name of Bank & Branch</th>
+                        <th style="width: 50px;">எண்/R</th>
+                        <th style="width: 40px;">வைப்/P</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" id="slip3_cheque_details_1" placeholder="Cheque Details"></td>
+                        <td><input type="text" id="slip3_cheque_rs_1" placeholder="Rs"></td>
+                        <td><input type="text" id="slip3_cheque_p_1" placeholder="P"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="slip3_cheque_details_2" placeholder=""></td>
+                        <td><input type="text" id="slip3_cheque_rs_2" placeholder=""></td>
+                        <td><input type="text" id="slip3_cheque_p_2" placeholder=""></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td>மொத்தம்/Total</td>
+                        <td><input type="text" id="slip3_total_rs" placeholder=""></td>
+                        <td><input type="text" id="slip3_total_p" placeholder=""></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="form-group">
+                <label>பரிவர்த்தனை அடையாள எண் /Transaction ID</label>
+                <input type="text" id="slip3_transaction_id" placeholder="Transaction ID">
+            </div>
+            
+            <div class="signature-section">
+                <div class="signature-line">
+                    <div>
+                        <div style="font-size: 9px;">உண்மை சத்தியம்/SWO</div>
+                        <div style="margin-top: 25px; border-top: 1px solid #000; padding-top: 3px; font-size: 9px;">
+                            Signature of Depositor
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 9px;">அலுவலர் / Passing Officer</div>
+                        <div style="margin-top: 25px; border-top: 1px solid #000; padding-top: 3px; font-size: 9px;">
+                            வைப்புதாரரின் கையொப்பம்
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="preview-modal" id="previewModal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h2>📋 Form Preview - Indian Bank Deposit Slip</h2>
+                <button class="preview-close" onclick="closePreview()">✕ Close</button>
+            </div>
+            
+            <div class="preview-data" id="previewData">
+                <!-- Preview content will be inserted here -->
+            </div>
+            
+            <div class="preview-actions">
+                <button class="action-btn clear-btn" onclick="closePreview()">← Go Back</button>
+                <button class="action-btn print-btn" onclick="confirmAndPrint()">✓ Looks Good - Print PDF</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-fill form from data collected by assistant
+        window.addEventListener('load', function() {
+            const rawData = localStorage.getItem('depositSlipData');
+            console.log('Raw data from localStorage:', rawData);
+            
+            if (!rawData) {
+                console.log('No form data found in localStorage');
+                return;
+            }
+            
+            let formData = JSON.parse(rawData);
+            console.log('Parsed form data:', formData);
+            
+            // CRITICAL FIX: Check if data is nested under FORM_DATA key
+            if (formData.FORM_DATA) {
+                console.log('Found nested FORM_DATA, extracting...');
+                formData = formData.FORM_DATA;
+                console.log('Extracted data:', formData);
+            }
+            
+            if (Object.keys(formData).length > 0) {
+                console.log('Filling form with data...');
+                fillFormFields(formData);
+                localStorage.removeItem('depositSlipData');
+            } else {
+                console.log('Form data is empty');
+            }
+        });
+
+        function fillFormFields(data) {
+            console.log('Starting to fill form with data:', data);
+            
+            // Helper function to safely set field value
+            function setFieldValue(fieldId, value) {
+                const field = document.getElementById(fieldId);
+                if (field && value) {
+                    field.value = value;
+                    console.log(`✓ Set ${fieldId} = ${value}`);
+                    return true;
+                } else if (!field) {
+                    console.warn(`✗ Field not found: ${fieldId}`);
+                } else {
+                    console.log(`- Skipped ${fieldId} (no value)`);
+                }
+                return false;
+            }
+            
+            // Helper function to fill account number boxes
+            function fillAccountNumber(accountNumber, slipPrefix) {
+                if (accountNumber) {
+                    const digits = accountNumber.toString().replace(/\D/g, '').substring(0, 12);
+                    console.log(`Filling account number for ${slipPrefix}:`, digits);
+                    for (let i = 0; i < digits.length && i < 12; i++) {
+                        setFieldValue(`${slipPrefix}_account_${i + 1}`, digits[i]);
+                    }
+                }
+            }
+
+            // Helper function to fill date boxes
+            function fillDate(date, slipPrefix) {
+                if (date) {
+                    console.log(`Filling date for ${slipPrefix}:`, date);
+                    let match = date.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                    
+                    if (match) {
+                        let [_, dd, mm, yyyy] = match;
+                        dd = dd.padStart(2, '0');
+                        mm = mm.padStart(2, '0');
+                        
+                        setFieldValue(`${slipPrefix}_date_dd1`, dd[0]);
+                        setFieldValue(`${slipPrefix}_date_dd2`, dd[1]);
+                        setFieldValue(`${slipPrefix}_date_mm1`, mm[0]);
+                        setFieldValue(`${slipPrefix}_date_mm2`, mm[1]);
+                        setFieldValue(`${slipPrefix}_date_yyyy1`, yyyy[0]);
+                        setFieldValue(`${slipPrefix}_date_yyyy2`, yyyy[1]);
+                        setFieldValue(`${slipPrefix}_date_yyyy3`, yyyy[2]);
+                        setFieldValue(`${slipPrefix}_date_yyyy4`, yyyy[3]);
+                    }
+                }
+            }
+
+            // Fill all three slips with common data
+            console.log('=== Filling Common Fields ===');
+            ['slip1', 'slip2', 'slip3'].forEach(slip => {
+                if (data.branch_name) setFieldValue(`${slip}_branch`, data.branch_name);
+                if (data.date) fillDate(data.date, slip);
+                if (data.account_number) fillAccountNumber(data.account_number, slip);
+                if (data.account_holder_name) setFieldValue(`${slip}_name`, data.account_holder_name);
+                if (data.amount_in_words) setFieldValue(`${slip}_amount_words`, data.amount_in_words);
+            });
+
+            console.log('=== Filling Slip 1 Specific Fields ===');
+            if (data.telephone_mobile_number) setFieldValue('slip1_tel_no', data.telephone_mobile_number);
+            if (data.total_amount) setFieldValue('slip1_amount', data.total_amount);
+
+            console.log('=== Filling Slip 3 Specific Fields ===');
+            if (data.telephone_mobile_number) setFieldValue('slip3_mobile', data.telephone_mobile_number);
+            if (data.email_id) setFieldValue('slip3_email', data.email_id);
+
+            // Handle deposit type
+            if (data.deposit_type) {
+                const isCash = data.deposit_type.toLowerCase().includes('cash');
+                console.log('=== Deposit Type:', data.deposit_type, 'Is Cash:', isCash, '===');
+                
+                if (isCash) {
+                    // Fill cash details in slip 1 and slip 3
+                    setFieldValue('slip1_cheque_details_1', 'Cash Deposit');
+                    setFieldValue('slip3_cheque_details_1', 'Cash Deposit');
+                    
+                    if (data.total_amount) {
+                        setFieldValue('slip1_cheque_rs_1', data.total_amount);
+                        setFieldValue('slip1_total_rs', data.total_amount);
+                        setFieldValue('slip3_cheque_rs_1', data.total_amount);
+                        setFieldValue('slip3_total_rs', data.total_amount);
+                    }
+                    
+                    console.log('=== Filling Cash Denominations ===');
+                    const denominations = ['2000', '500', '200', '100', '50', '20', '10', '5'];
+                    let totalCash = 0;
+                    
+                    denominations.forEach(denom => {
+                        const qtyKey = `denom_${denom}_qty`;
+                        const qty = data[qtyKey];
+                        
+                        if (qty && qty !== '0') {
+                            console.log(`Processing ₹${denom}: ${qty} notes`);
+                            setFieldValue(`slip2_denom_${denom}_qty`, qty);
+                            
+                            const amount = parseInt(denom) * parseInt(qty);
+                            setFieldValue(`slip2_denom_${denom}_amount`, amount.toString());
+                            totalCash += amount;
+                        }
+                    });
+                    
+                    if (totalCash > 0) {
+                        setFieldValue('slip2_total_amount', totalCash.toString());
+                        console.log('Total cash amount:', totalCash);
+                    }
+                }
+            }
+
+            console.log('=== Form Filling Completed! ===');
+            alert('✓ Form has been filled successfully! Please review and print.');
+        }
+
+        function showPreview() {
+            const formData = collectAllFormData();
+            displayPreview(formData);
+            document.getElementById('previewModal').style.display = 'block';
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        function collectAllFormData() {
+            const data = {
+                basic: {},
+                deposit: {},
+                cash: {},
+                cheque: {}
+            };
+
+            // Basic Information (from Slip 1)
+            data.basic.branch = document.getElementById('slip1_branch').value;
+            data.basic.date = collectDate('slip1');
+            data.basic.account_number = collectAccountNumber('slip1');
+            data.basic.name = document.getElementById('slip1_name').value;
+            data.basic.telephone = document.getElementById('slip1_tel_no').value;
+            data.basic.email = document.getElementById('slip3_email').value;
+
+            // Deposit Information
+            data.deposit.amount = document.getElementById('slip1_amount').value;
+            data.deposit.amount_words = document.getElementById('slip1_amount_words').value;
+
+            // Cash Denomination (Slip 2)
+            const denominations = ['2000', '500', '200', '100', '50', '20', '10', '5', 'coins'];
+            denominations.forEach(denom => {
+                const qty = document.getElementById(`slip2_denom_${denom}_qty`).value;
+                const amt = document.getElementById(`slip2_denom_${denom}_amount`).value;
+                if (qty || amt) {
+                    data.cash[denom] = { qty: qty, amount: amt };
+                }
+            });
+            data.cash.total = document.getElementById('slip2_total_amount').value;
+            data.cash.form60 = document.getElementById('slip2_form60').checked;
+            data.cash.form61 = document.getElementById('slip2_form61').checked;
+
+            // Cheque Information
+            data.cheque.details = document.getElementById('slip1_cheque_details_1').value;
+            data.cheque.amount_rs = document.getElementById('slip1_cheque_rs_1').value;
+            data.cheque.amount_p = document.getElementById('slip1_cheque_p_1').value;
+
+            return data;
+        }
+
+        function collectDate(slipPrefix) {
+            const dd1 = document.getElementById(`${slipPrefix}_date_dd1`).value;
+            const dd2 = document.getElementById(`${slipPrefix}_date_dd2`).value;
+            const mm1 = document.getElementById(`${slipPrefix}_date_mm1`).value;
+            const mm2 = document.getElementById(`${slipPrefix}_date_mm2`).value;
+            const yyyy1 = document.getElementById(`${slipPrefix}_date_yyyy1`).value;
+            const yyyy2 = document.getElementById(`${slipPrefix}_date_yyyy2`).value;
+            const yyyy3 = document.getElementById(`${slipPrefix}_date_yyyy3`).value;
+            const yyyy4 = document.getElementById(`${slipPrefix}_date_yyyy4`).value;
+            
+            if (dd1 || dd2 || mm1 || mm2 || yyyy1 || yyyy2 || yyyy3 || yyyy4) {
+                return `${dd1}${dd2}/${mm1}${mm2}/${yyyy1}${yyyy2}${yyyy3}${yyyy4}`;
+            }
+            return '';
+        }
+
+        function collectAccountNumber(slipPrefix) {
+            let accountNum = '';
+            for (let i = 1; i <= 12; i++) {
+                const val = document.getElementById(`${slipPrefix}_account_${i}`).value;
+                accountNum += val || '';
+            }
+            return accountNum;
+        }
+
+        function displayPreview(data) {
+            const previewHtml = `
+                <div class="preview-section">
+                    <h3>📝 Basic Information</h3>
+                    <div class="preview-field">
+                        <div class="preview-label">Branch:</div>
+                        <div class="preview-value">${data.basic.branch || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                    <div class="preview-field">
+                        <div class="preview-label">Date:</div>
+                        <div class="preview-value">${data.basic.date || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                    <div class="preview-field">
+                        <div class="preview-label">Account Number:</div>
+                        <div class="preview-value">${data.basic.account_number || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                    <div class="preview-field">
+                        <div class="preview-label">Account Holder Name:</div>
+                        <div class="preview-value">${data.basic.name || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                    <div class="preview-field">
+                        <div class="preview-label">Telephone/Mobile:</div>
+                        <div class="preview-value">${data.basic.telephone || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                    <div class="preview-field">
+                        <div class="preview-label">Email:</div>
+                        <div class="preview-value">${data.basic.email || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3>💰 Deposit Information</h3>
+                    <div class="preview-field">
+                        <div class="preview-label">Amount:</div>
+                        <div class="preview-value">₹ ${data.deposit.amount || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                    <div class="preview-field">
+                        <div class="preview-label">Amount in Words:</div>
+                        <div class="preview-value">${data.deposit.amount_words || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                </div>
+
+                ${Object.keys(data.cash).some(k => data.cash[k] && (typeof data.cash[k] === 'object' ? data.cash[k].qty || data.cash[k].amount : data.cash[k])) ? `
+                <div class="preview-section">
+                    <h3>💵 Cash Denomination Breakdown</h3>
+                    ${Object.entries(data.cash).map(([key, val]) => {
+                        if (key === 'total' && val) {
+                            return `<div class="preview-field" style="font-weight: bold; background: #f0f0f0; margin-top: 10px; padding: 10px; border-radius: 5px;">
+                                <div class="preview-label">Total Cash:</div>
+                                <div class="preview-value">₹ ${val}</div>
+                            </div>`;
+                        } else if (key === 'form60' || key === 'form61') {
+                            return val ? `<div class="preview-field">
+                                <div class="preview-label">${key === 'form60' ? 'Form 60' : 'Form 61'}:</div>
+                                <div class="preview-value">✓ Yes</div>
+                            </div>` : '';
+                        } else if (val && typeof val === 'object' && (val.qty || val.amount)) {
+                            return `<div class="preview-field">
+                                <div class="preview-label">₹${key === 'coins' ? 'Coins' : key} Notes:</div>
+                                <div class="preview-value">${val.qty ? val.qty + ' notes' : ''} ${val.amount ? '= ₹' + val.amount : ''}</div>
+                            </div>`;
+                        }
+                        return '';
+                    }).join('')}
+                </div>
+                ` : ''}
+
+                ${data.cheque.details || data.cheque.amount_rs ? `
+                <div class="preview-section">
+                    <h3>📄 Cheque Information</h3>
+                    <div class="preview-field">
+                        <div class="preview-label">Cheque Details:</div>
+                        <div class="preview-value">${data.cheque.details || '<span class="empty-value">Not provided</span>'}</div>
+                    </div>
+                    <div class="preview-field">
+                        <div class="preview-label">Cheque Amount:</div>
+                        <div class="preview-value">₹ ${data.cheque.amount_rs || '0'}.${data.cheque.amount_p || '00'}</div>
+                    </div>
+                </div>
+                ` : ''}
+            `;
+
+            document.getElementById('previewData').innerHTML = previewHtml;
+        }
+
+        function confirmAndPrint() {
+            closePreview();
+            printForm();
+        }
+
+        function printForm() {
+            window.print();
+        }
+
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all form data? This action cannot be undone.')) {
+                document.querySelectorAll('input[type="text"]').forEach(input => {
+                    input.value = '';
+                });
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                alert('Form cleared successfully!');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('previewModal');
+            if (event.target === modal) {
+                closePreview();
+            }
+        }
+    </script>
+</body>
+</html>

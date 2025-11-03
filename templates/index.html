@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech to Text - Gemini</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #recordBtn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        #recordBtn:hover {
+            background: #764ba2;
+            transform: scale(1.05);
+        }
+        #recordBtn.recording {
+            background: #e74c3c;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        #status {
+            margin-top: 15px;
+            color: #666;
+            font-style: italic;
+        }
+        #transcription {
+            width: 100%;
+            min-height: 200px;
+            padding: 20px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: #764ba2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            background: #6a4291;
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Speech to Text</h1>
+
+        <div class="controls">
+            <button id="recordBtn">Start Recording</button>
+            <p id="status">Click to start recording</p>
+        </div>
+
+        <textarea id="transcription" placeholder="Your transcription will appear here..."></textarea>
+        
+        <a href="/assistant" class="nav-link">Go to Form Assistant →</a>
+    </div>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        const recordBtn = document.getElementById('recordBtn');
+        const status = document.getElementById('status');
+        const transcription = document.getElementById('transcription');
+
+        recordBtn.addEventListener('click', toggleRecording);
+
+        async function toggleRecording() {
+            if (!isRecording) {
+                await startRecording();
+            } else {
+                stopRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    await sendAudioToServer(audioBlob);
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                recordBtn.textContent = 'Stop Recording';
+                recordBtn.classList.add('recording');
+                status.textContent = 'Recording... Click to stop';
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                status.textContent = 'Error: Could not access microphone';
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                recordBtn.textContent = 'Start Recording';
+                recordBtn.classList.remove('recording');
+                status.textContent = 'Processing audio...';
+            }
+        }
+
+        async function sendAudioToServer(audioBlob) {
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.webm');
+
+            try {
+                const response = await fetch('/transcribe', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    transcription.value = data.text;
+                    status.textContent = 'Transcription completed!';
+                } else {
+                    status.textContent = 'Error: ' + data.error;
+                }
+            } catch (error) {
+                console.error('Error sending audio:', error);
+                status.textContent = 'Error: Could not process audio';
+            }
+        }
+    </script>
+</body>
+</html>
